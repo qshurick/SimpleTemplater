@@ -24,16 +24,55 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
         $this->_parser = new SimpleTemplate\Parser();
     }
 
-    public function testSimpleTokens() {
-        $source = "Hello, world!";
+    /**
+     * @dataProvider simpleTokensDataProvider
+     */
+    public function testSimpleTokens($source, $parsed) {
+        /*$source = "Hello, world!";
         $parsed = array(
             array(
                 "text" => "Hello, world!",
                 "type" => "simple-text"
             )
-        );
+        );*/
         $this->_parser->setData($source);
         $this->assertEquals($parsed, $this->_parser->getChunks());
+    }
+
+    public function simpleTokensDataProvider() {
+        return array(
+            array("Hello, world!", array(
+                array(
+                    "type" => "simple-text",
+                    "text" => "Hello, world!",
+                ),
+            )),
+            array("{{ Hello }}, world!", array(
+                array(
+                    "text" => "Hello",
+                    "type" => "simple-text",
+                ),
+                array(
+                    "text" => ", world!",
+                    "type" => "simple-text",
+                ),
+            )),
+            array("Hello, {{ world|filter }}!", array(
+                array (
+                    "text" => "Hello,",
+                    "type" => "simple-text",
+                ),
+                array (
+                    "text" => "world",
+                    "type" => "filter",
+                    "filters" => array("filter", ),
+                ),
+                array (
+                    "text" => "!",
+                    "type" => "simple-text",
+                ),
+            )),
+        );
     }
 
     /**

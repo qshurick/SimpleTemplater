@@ -62,7 +62,9 @@ class Parser {
 
         $chunks = array();
         foreach($prepare as $item) {
-            $chunks[] = $this->_createChunk($item);
+            $tmp = $this->_createChunk($item);
+            if ("" == $tmp["text"] && "simple-text" == $tmp["type"]) continue;
+            $chunks[] = $tmp;
         }
         return $chunks;
     }
@@ -73,10 +75,23 @@ class Parser {
         $item = trim($item);
         $chunk = array();
         if (false !== strpos($item, $startTag)) {
-            $chunk = array(
-                "type" => "filter",
-                "text" => preg_replace('/' . $startTag . '\s+(.*)\s+' . $endTag .'/', "\1", $item),
-            );
+            $tmp = preg_replace('/' . $startTag . '\s+(.*)\s+' . $endTag .'/', "$1", $item);
+            if (false !== strpos($tmp, "|")) {
+                list($text, $filters) = explode("|", $tmp, 2);
+                $filters = explode("|", $filters);
+                $chunk = array(
+                    "type" => "filter",
+                    "text" => $text,
+                    "filters" => $filters
+                );
+            } else {
+                // not a filter
+                $text = $tmp;
+                $chunk = array(
+                    "type" => "simple-text",
+                    "text" => $text
+                );
+            }
         } else {
             $chunk = array(
                 "type" => "simple-text",
