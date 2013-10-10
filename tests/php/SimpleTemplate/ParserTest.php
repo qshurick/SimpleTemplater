@@ -22,6 +22,8 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
 
     public function setUp() {
         $this->_parser = new SimpleTemplate\Parser();
+        $this->_parser->addChunkFactory(new SimpleTemplate\Text\Chunk());
+        $this->_parser->addChunkFactory(new SimpleTemplate\Filters\Chunk());
     }
 
     /**

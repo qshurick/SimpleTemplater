@@ -13,8 +13,15 @@ class Parser {
 
     protected $_realData;
     protected $_chunks = array();
+    protected $_chuckFactories = array();
 
     private $valid = null;
+
+    public function addChunkFactory($factory) {
+        if ($factory instanceof Chunk) {
+            array_push($this->_chuckFactories, $factory);
+        }
+    }
 
     /**
      * @param $data String text for parsing
@@ -39,9 +46,19 @@ class Parser {
         return true;
     }
 
+    private function _validate_withChunkEngine() {
+        $data = $this->_realData;
+        foreach($this->_chuckFactories as $factory) {
+            /** @var $factory Chunk */
+            if (!$factory->isParsable($data)) return false;
+        }
+        return true;
+    }
+
     public function isValid() {
         if (is_null($this->valid)) {
-            $this->valid = $this->_validate();
+//            $this->valid = $this->_validate();
+            $this->valid = $this->_validate_withChunkEngine();
         }
         return $this->valid;
     }
