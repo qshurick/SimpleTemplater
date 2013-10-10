@@ -9,7 +9,7 @@
 
 namespace SimpleTemplate\Filters;
 
-class TrimSpacesFilter implements Filter {
+class TrimSpaceFilter implements Filter {
 
     /**
      * Filter change incoming string according to internal rules

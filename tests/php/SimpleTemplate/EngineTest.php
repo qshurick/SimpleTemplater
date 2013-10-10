@@ -12,6 +12,7 @@ namespace Test;
 require_once 'ext/common/common.inc.php';
 
 use SimpleTemplate;
+use SimpleTemplate\Filters\TrimSpaceFilter;
 
 class EngineTest extends \PHPUnit_Framework_TestCase {
 
@@ -22,7 +23,6 @@ class EngineTest extends \PHPUnit_Framework_TestCase {
 
     public function setUp() {
         $this->engine = new SimpleTemplate\Engine();
-        $this->engine->init();
     }
 
     public function testEnginePresent() {
@@ -35,19 +35,12 @@ class EngineTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($html, $this->engine->parse($text));
     }
 
-    public function testTrimSpaces() {
+    public function testPostFiltersPush() {
         $text = "  Hello,   world! ";
         $html = "<p>Hello, world!</p>";
+        $this->engine->addPostFilter(new TrimSpaceFilter());
         $this->assertEquals($html, $this->engine->parse($text));
     }
 
-    public function testTrimBreaks() {
-        $text = "
-        Hello,
-        world!
-        ";
-        $html = "<p>Hello, world!</p>";
-        $this->assertEquals($html, $this->engine->parse($text));
-    }
 
 }

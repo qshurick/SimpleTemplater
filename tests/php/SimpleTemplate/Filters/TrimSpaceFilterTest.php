@@ -16,12 +16,12 @@ use SimpleTemplate\Filters;
 class TrimSpaceFilter extends \PHPUnit_Framework_TestCase {
 
     /**
-     * @var Filters\TrimSpacesFilter
+     * @var Filters\TrimSpaceFilter
      */
     protected $filter;
 
     public function setUp() {
-        $this->filter = new Filters\TrimSpacesFilter();
+        $this->filter = new Filters\TrimSpaceFilter();
     }
 
     public function testTrimBeforeSpaces() {
