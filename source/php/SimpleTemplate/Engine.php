@@ -13,7 +13,6 @@ namespace SimpleTemplate;
 require_once 'ext/common/common.inc.php';
 
 use SimpleTemplate\Filters;
-use SimpleTemplate\Filters\Exceptions;
 
 class Engine {
 
@@ -27,19 +26,16 @@ class Engine {
 
     public function addPostFilter($filter) {
         if (!$filter instanceof Filters\Filter) {
-            throw new Exceptions\NotImplementedFilterInterfaceException();
+            throw new Filters\Exceptions\NotImplementedFilterInterfaceException();
         }
         array_push($this->_postFilters, $filter);
     }
 
     private function postFilters() {
         foreach ($this->_postFilters as $filter) {
+            /** @var $filter Filters\Filter */
             $this->_value = $filter->filter($this->_value);
         }
-    }
-
-    public function prepare() {
-
     }
 
     public function parse($text) {
