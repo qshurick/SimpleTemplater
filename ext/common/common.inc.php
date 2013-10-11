@@ -24,7 +24,7 @@ function logging($msg, $level = "info") {
         "debug" => 5,
         "trace" => 6,
     );
-    if (isset($levels[$level]) && LOG_LEVEL <= $level) {
+    if (isset($levels[$level]) && $levels[LOG_LEVEL] >= $levels[$level]) {
         date_default_timezone_set("Europe/Moscow");
         $msg = "\n[" . date('d.m.Y H:i:s') . "] [" . str_pad(strtoupper($level), 5, ' ', STR_PAD_LEFT) . "] " . $msg;
         file_put_contents(LOG_PATH, $msg, FILE_APPEND);
