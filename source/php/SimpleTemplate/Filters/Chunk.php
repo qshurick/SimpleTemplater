@@ -52,7 +52,7 @@ class Chunk implements \SimpleTemplate\Chunk {
      */
     public function create($strChunk) {
         $regExp = '/^' . '\\' . implode('\\', str_split(self::OPEN_TAG)) . '\s+([^\s\\'.self::CHAIN_SEPARATOR.']+)(\\'.self::CHAIN_SEPARATOR.'(.*))?\s+' . '\\' . implode('\\', str_split(self::CLOSE_TAG)) .'$/';
-        Log\logging("Try use '$regExp' to '$strChunk'", "debug");
+        Log\logging("Try use '$regExp' to '$strChunk'", "trace");
         if (0 < preg_match($regExp, $strChunk, $matches) ) {
             $text = trim($matches[1]);
             $filters = isset($matches[3]) ? $matches[3] : "";
@@ -77,9 +77,9 @@ class Chunk implements \SimpleTemplate\Chunk {
      */
     public function isParsable($realString) {
         $result = substr_count($realString, self::OPEN_TAG) == substr_count($realString, self::CLOSE_TAG);
-        Log\logging(__METHOD__);
-        Log\logging("Open tags: " . substr_count($realString, self::OPEN_TAG), "debug");
-        Log\logging("Close tags: " . substr_count($realString, self::CLOSE_TAG), "debug");
+        Log\logging(__METHOD__, "trace");
+        Log\logging("Open tags: " . substr_count($realString, self::OPEN_TAG), "trace");
+        Log\logging("Close tags: " . substr_count($realString, self::CLOSE_TAG), "trace");
         return $result;
     }
 
