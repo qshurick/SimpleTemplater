@@ -106,4 +106,30 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
         );
     }
 
+    /**
+     * @dataProvider simpleParsingDataProvider
+     * @param $expected String
+     * @param $string String
+     */
+    public function testSimpleParsing($string, $expected) {
+        $this->_parser->setData($string);
+        $chunks = $this->_parser->getChunks();
+        $this->assertEquals($expected, $this->_parser->parse($chunks));
+    }
+
+    public function simpleParsingDataProvider() {
+        return array(
+            array("Hello, world!", "<p> Hello, world!</p>"),
+            array("Hello,\nworld!", "<p> Hello, world!</p>"),
+        );
+    }
+
+    public function testParseStringWithABoldFilter() {
+        $string = "Hello, {{ world|bold }}!";
+        $expected = "<p>Hello, <strong>world</strong>!</p>";
+        $this->_parser->setData($string);
+        $chunks = $this->_parser->getChunks();
+        $this->assertEquals($expected, $this->_parser->parse($chunks));
+    }
+
 }
