@@ -31,22 +31,6 @@ class Parser {
     }
 
     private function _validate() {
-        $startTag = "{{";
-        $endTag   = "}}";
-        try {
-            // check all tags are closed
-            \PHPUnit_Framework_Assert::assertEquals(
-                substr_count($this->_realData, $startTag),
-                substr_count($this->_realData, $endTag)
-            );
-
-        } catch (\PHPUnit_Framework_ExpectationFailedException $ex) {
-            return false;
-        }
-        return true;
-    }
-
-    private function _validate_withChunkEngine() {
         $data = $this->_realData;
         foreach($this->_chuckFactories as $factory) {
             /** @var $factory Chunk */
@@ -57,8 +41,7 @@ class Parser {
 
     public function isValid() {
         if (is_null($this->valid)) {
-//            $this->valid = $this->_validate();
-            $this->valid = $this->_validate_withChunkEngine();
+            $this->valid = $this->_validate();
         }
         return $this->valid;
     }
