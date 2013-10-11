@@ -22,7 +22,7 @@ class Chunk implements \SimpleTemplate\Chunk {
     public function create($strChunk) {
         return array(
             "type" => self::CHUNK_NAME,
-            "text" => $strChunk
+            "text" => trim($strChunk)
         );
     }
 

@@ -9,9 +9,12 @@
 
 namespace SimpleTemplate;
 
+use SimpleTemplate\Filters\Exceptions\InvalidFilterChunkStringException;
+
 class Parser {
 
     protected $_realData;
+    protected $_preparedData;
     protected $_chunks = array();
     protected $_chuckFactories = array();
 
@@ -49,6 +52,36 @@ class Parser {
     public function reValidate() {
         $this->valid = null;
         $this->isValid();
+    }
+
+    private function _prepare() {
+        $prepare = $this->_realData;
+        foreach ($this->_chuckFactories as $factory) {
+            /** @var $factory Chunk */
+            $prepare = $factory->prepare($prepare, "\n");
+        }
+        $this->_preparedData = $prepare;
+    }
+
+    private function _chunk_withNewChunkEngine() {
+        $this->_prepare();
+        $chunks = array();
+        $prepared = explode("\n", $this->_preparedData);
+        foreach($prepared as $chunk) {
+            if ("" == $chunk) continue;
+            foreach($this->_chuckFactories as $factory) {
+                /** @var $factory Chunk */
+                if ($factory->valid($chunk)) {
+                    try {
+                        $chunks[] = $factory->create($chunk);
+                        break;
+                    } catch (InvalidFilterChunkStringException $ex) {
+                        continue;
+                    }
+                }
+            }
+        }
+        return $chunks;
     }
 
     private function _chunk() {
@@ -103,7 +136,7 @@ class Parser {
 
     public function getChunks() {
         if ($this->isValid()) {
-            $this->_chunks = $this->_chunk();
+            $this->_chunks = $this->_chunk_withNewChunkEngine();
         }
         return $this->_chunks;
     }

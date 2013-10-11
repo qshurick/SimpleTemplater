@@ -22,21 +22,14 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
 
     public function setUp() {
         $this->_parser = new SimpleTemplate\Parser();
-        $this->_parser->addChunkFactory(new SimpleTemplate\Text\Chunk());
         $this->_parser->addChunkFactory(new SimpleTemplate\Filters\Chunk());
+        $this->_parser->addChunkFactory(new SimpleTemplate\Text\Chunk());
     }
 
     /**
      * @dataProvider simpleTokensDataProvider
      */
     public function testSimpleTokens($source, $parsed) {
-        /*$source = "Hello, world!";
-        $parsed = array(
-            array(
-                "text" => "Hello, world!",
-                "type" => "simple-text"
-            )
-        );*/
         $this->_parser->setData($source);
         $this->assertEquals($parsed, $this->_parser->getChunks());
     }
@@ -45,33 +38,33 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
         return array(
             array("Hello, world!", array(
                 array(
-                    "type" => "simple-text",
                     "text" => "Hello, world!",
+                    "type" => "simple-text",
                 ),
             )),
             array("{{ Hello }}, world!", array(
                 array(
-                    "text" => "Hello",
                     "type" => "simple-text",
+                    "text" => "Hello",
                 ),
                 array(
-                    "text" => ", world!",
                     "type" => "simple-text",
+                    "text" => ", world!",
                 ),
             )),
             array("Hello, {{ world|filter }}!", array(
                 array (
-                    "text" => "Hello,",
                     "type" => "simple-text",
+                    "text" => "Hello,",
                 ),
                 array (
-                    "text" => "world",
                     "type" => "filter",
+                    "text" => "world",
                     "filters" => array("filter", ),
                 ),
                 array (
-                    "text" => "!",
                     "type" => "simple-text",
+                    "text" => "!",
                 ),
             )),
         );

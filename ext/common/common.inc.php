@@ -22,6 +22,7 @@ function logging($msg, $level = "info") {
         "warn"  => 3,
         "info"  => 4,
         "debug" => 5,
+        "trace" => 6,
     );
     if (isset($levels[$level]) && LOG_LEVEL <= $level) {
         date_default_timezone_set("Europe/Moscow");

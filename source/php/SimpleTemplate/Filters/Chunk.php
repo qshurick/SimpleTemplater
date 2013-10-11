@@ -51,9 +51,11 @@ class Chunk implements \SimpleTemplate\Chunk {
      * @return Chunk
      */
     public function create($strChunk) {
-        if (0 < preg_match('/^' . self::OPEN_TAG . '\s+([^\s'.self::CHAIN_SEPARATOR.'])'.self::CHAIN_SEPARATOR.'(.*)\s+' . self::CLOSE_TAG .'$/', $strChunk, $matches) ) {
+        $regExp = '/^' . '\\' . implode('\\', str_split(self::OPEN_TAG)) . '\s+([^\s\\'.self::CHAIN_SEPARATOR.']+)(\\'.self::CHAIN_SEPARATOR.'(.*))?\s+' . '\\' . implode('\\', str_split(self::CLOSE_TAG)) .'$/';
+        Log\logging("Try use '$regExp' to '$strChunk'", "debug");
+        if (0 < preg_match($regExp, $strChunk, $matches) ) {
             $text = trim($matches[1]);
-            $filters = trim($matches[2]);
+            $filters = isset($matches[3]) ? $matches[3] : "";
             if ("" == $filters) {
                 throw new Exceptions\InvalidFilterChunkStringException("Filter name not found");
             }
