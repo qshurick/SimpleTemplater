@@ -12,6 +12,7 @@ namespace SimpleTemplate\Filters;
 require_once 'ext/common/common.inc.php';
 
 use SimpleTemplate\Filters\Exceptions;
+use SimpleTemplate\Text;
 use SimpleTemplate as Log;
 
 class Chunk implements \SimpleTemplate\Chunk {
@@ -57,7 +58,8 @@ class Chunk implements \SimpleTemplate\Chunk {
             $text = trim($matches[1]);
             $filters = isset($matches[3]) ? $matches[3] : "";
             if ("" == $filters) {
-                throw new Exceptions\InvalidFilterChunkStringException("Filter name not found");
+                $textFactory = new Text\Chunk();
+                return $textFactory->create($text);
             }
             $filters = explode(self::CHAIN_SEPARATOR, $filters);
             return array(
@@ -66,7 +68,8 @@ class Chunk implements \SimpleTemplate\Chunk {
                 "filters" => $filters,
             );
         }
-        throw new Exceptions\InvalidFilterChunkStringException();
+        $textFactory = new Text\Chunk();
+        return $textFactory->create($strChunk);
     }
 
     /**
