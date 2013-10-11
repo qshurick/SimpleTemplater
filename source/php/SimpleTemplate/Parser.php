@@ -121,6 +121,7 @@ class Parser {
     private function postParse($text) {
         $post = "<p>$text</p>";
         $post = preg_replace('/>\s+/', '>', $post);
+//        $post = preg_replace('/\s+</', '<', $post);
         return $post;
     }
 
