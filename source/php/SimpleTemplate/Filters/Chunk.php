@@ -62,10 +62,22 @@ class Chunk implements \SimpleTemplate\Chunk {
                 return $textFactory->create($text);
             }
             $filters = explode(self::CHAIN_SEPARATOR, $filters);
+            $filterList = array();
+            foreach ($filters as $filterAlias) {
+                $filterName = "SimpleTemplate\\Filters\\" . ucfirst($filterAlias) . "Filter";
+                if (class_exists($filterName)) {
+                    Log\logging("Such class exists", "trace");
+                    $filterList[] = new $filterName();
+                } else {
+                    // Tests support
+                    Log\logging("Such doesn't class exists", "error");
+                    $filterList[] = $filterAlias;
+                }
+            }
             return array(
                 "type"    => self::CHUNK_NAME,
                 "text"    => $text,
-                "filters" => $filters,
+                "filters" => $filterList,
             );
         }
         $textFactory = new Text\Chunk();

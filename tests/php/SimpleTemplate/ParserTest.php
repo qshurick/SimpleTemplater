@@ -119,8 +119,8 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
 
     public function simpleParsingDataProvider() {
         return array(
-            array("Hello, world!", "<p> Hello, world!</p>"),
-            array("Hello,\nworld!", "<p> Hello, world!</p>"),
+            array("Hello, world!", "<p>Hello, world!</p>"),
+            array("Hello,\nworld!", "<p>Hello, world!</p>"),
         );
     }
 

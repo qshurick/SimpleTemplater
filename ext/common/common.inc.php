@@ -51,8 +51,10 @@ function load($namespace) {
     }
     if (!$firstWord) {
         $fullPath = __DIR__ . DIRECTORY_SEPARATOR . $path . DIRECTORY_SEPARATOR . $name . '.php';
-//        print "Trying load '$fullPath' \n";
-        return include_once($fullPath);
+        logging("::internal:: loading path '$fullPath'", "debug");
+        if (file_exists($fullPath)) {
+            return include_once($fullPath);
+        }
     }
     print "Can't load anything for '$namespace' fail on " . $name . " \n";
     return false;

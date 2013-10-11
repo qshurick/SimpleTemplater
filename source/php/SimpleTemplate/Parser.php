@@ -10,6 +10,8 @@
 namespace SimpleTemplate;
 
 use SimpleTemplate\Filters\Exceptions\InvalidFilterChunkStringException;
+use SimpleTemplate\Filters;
+use SimpleTemplate as Log;
 
 class Parser {
 
@@ -89,6 +91,37 @@ class Parser {
             $this->_chunks = $this->_chunk();
         }
         return $this->_chunks;
+    }
+
+    public function parse() {
+        $chunks = $this->getChunks();
+        $result = "";
+        foreach($chunks as $chunk) {
+            $result .= " ";
+            switch ($chunk['type']) {
+                case 'filter':
+                    $tmp = $chunk['text'];
+                    foreach($chunk['filters'] as $filter) {
+                        /** @var $filter Filters\Filter */
+//                        Log\logging($filter);
+                        $tmp = $filter->filter($tmp);
+                    }
+                    $result .= $tmp;
+                    break;
+                case 'simple-text':
+                    // do default
+                default:
+                    $result .= $chunk['text'];
+                    break;
+            }
+        }
+        return $this->postParse($result);
+    }
+
+    private function postParse($text) {
+        $post = "<p>$text</p>";
+        $post = preg_replace('/>\s+/', '>', $post);
+        return $post;
     }
 
 }

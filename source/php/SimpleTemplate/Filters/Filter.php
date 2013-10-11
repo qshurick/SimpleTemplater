@@ -25,4 +25,9 @@ interface Filter {
      * @param array $args array of the extra arguments
      */
     public function setArguments($args = array());
+
+    /**
+     * @return String filter alias, see: {{ some phrase|filterAlias }}
+     */
+    public function getAlias();
 }
