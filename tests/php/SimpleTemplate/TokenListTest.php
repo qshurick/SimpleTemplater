@@ -31,4 +31,13 @@ class TokenListTest extends \PHPUnit_Framework_TestCase {
         $this->_list->add($mockUndefined);
         $this->assertTrue($this->_list->hasUndefined());
     }
+
+    public function testCalculatingUndefinedWithoutThem() {
+        $mockUndefined = $this->getMock('\SimpleTemplate\Token', array("getType"));
+        $mockUndefined->expects($this->any())
+            ->method("getType")
+            ->will($this->returnValue("I'm not an " . \SimpleTemplate\Token::UNDEFINED));
+        $this->_list->add($mockUndefined);
+        $this->assertFalse($this->_list->hasUndefined());
+    }
 }
