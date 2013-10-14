@@ -89,4 +89,24 @@ class LinkedListTest extends \PHPUnit_Framework_TestCase {
         $this->assertTrue($this->_list->hasNext());
     }
 
+    public function testMakingChain() {
+        $this->_list->add(1);
+        $this->_list->add(2);
+        $newList = new \SimpleTemplate\LinkedList();
+        $newList->add(3);
+        $newList->add(4);
+        $this->_list->next();
+        $this->_list->next();
+        $this->_list->makeChain($newList);
+        $this->assertEquals(3, $this->_list->count());
+    }
+
+    public function testRecalculatedCount() {
+        $this->_list->add(1);
+        $this->_list->add(2);
+        $oldCount = $this->_list->count();
+        $this->_list->calculateCount();
+        $this->assertEquals($oldCount, $this->_list->count());
+    }
+
 }

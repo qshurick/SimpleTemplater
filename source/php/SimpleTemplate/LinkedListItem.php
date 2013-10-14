@@ -42,12 +42,29 @@ class LinkedListItem {
         return $this->_previous;
     }
 
-    public function setPrevious(\SimpleTemplate\LinkedListItem $previous) {
+    /**
+     * @param $previous null|\SimpleTemplate\LinkedListItem
+     */
+    public function setPrevious($previous) {
         $this->_previous = $previous;
     }
 
-    public function setNext(\SimpleTemplate\LinkedListItem $next) {
+    /**
+     * @param $next null|\SimpleTemplate\LinkedListItem
+     */
+    public function setNext($next) {
         $this->_next = $next;
+    }
+
+    public function makeChain(\SimpleTemplate\LinkedList $chain) {
+        $chain->getFirst()->setPrevious($this->_previous);
+        if (null !== $this->_previous) $this->_previous->setNext($chain->getFirst());
+        $chain->getLast()->setNext($this->_next);
+        if (null !== $this->_next) $this->_next->setPrevious($chain->getLast());
+
+        $this->_next     = null;
+        $this->_previous = null;
+        $this->_value    = null;
     }
 
     public function toString() {

@@ -33,7 +33,7 @@ class LinkedList {
     }
 
     public function isEmpty() {
-        return true;
+        return 0 == $this->_count;
     }
 
     public function add($item) {
@@ -48,10 +48,30 @@ class LinkedList {
         $this->_count++;
     }
 
+    public function calculateCount() {
+        $tmpCurrent = $this->_current;
+        $tmpDone    = $this->_done;
+
+        $count = 0;
+        $this->_current = null;
+        $this->_done = false;
+        while($this->hasNext()) {
+            $this->next();
+            $count++;
+        }
+        $this->_count = $count;
+        $this->_current = $tmpCurrent;
+        $this->_done = $tmpDone;
+    }
+
     public function count() {
         return $this->_count;
     }
 
+    /**
+     * @return null|\SimpleTemplate\LinkedListITem
+     * @throws Exceptions\LinkedListIsOverException
+     */
     public function next() {
         if (null === $this->_current && !$this->_done) {
             $this->_current = $this->_first;
@@ -62,7 +82,6 @@ class LinkedList {
             $this->_done = true;
             throw new \SimpleTemplate\Exceptions\LinkedListIsOverException();
         }
-        \SimpleTemplate\logging($this->_current->toString());
         return $this->_current->getValue();
     }
 
@@ -86,6 +105,23 @@ class LinkedList {
     public function reset() {
         $this->_current = null;
         $this->_done = false;
+    }
+
+    public function getFirst(){
+        return $this->_first;
+    }
+
+    public function getLast() {
+        return $this->_last;
+    }
+
+    public function makeChain(\SimpleTemplate\LinkedList $chain) {
+        if (null === $this->_current) {
+            throw new \SimpleTemplate\Exceptions\LinkedListNoPointerException();
+        }
+        $this->_current->makeChain($chain);
+        $this->_current = $chain->getFirst();
+        $this->_count += $chain->count() - 1;
     }
 
 }
