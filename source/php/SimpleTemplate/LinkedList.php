@@ -46,6 +46,7 @@ class LinkedList {
         }
         $this->_last = $newItem;
         $this->_count++;
+        return $this;
     }
 
     public function calculateCount() {
@@ -105,6 +106,7 @@ class LinkedList {
     public function reset() {
         $this->_current = null;
         $this->_done = false;
+        return $this;
     }
 
     public function getFirst(){
@@ -122,6 +124,16 @@ class LinkedList {
         $this->_current->makeChain($chain);
         $this->_current = $chain->getFirst();
         $this->_count += $chain->count() - 1;
+        return $this;
+    }
+
+    public function join(\SimpleTemplate\LinkedList $chain) {
+        $this->_current = null;
+        $this->_last->setNext($chain->getFirst());
+        $chain->getFirst()->setPrevious($this->_last);
+        $this->_last = $chain->getLast();
+        $this->_count += $chain->count();
+        return $this;
     }
 
 }

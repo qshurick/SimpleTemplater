@@ -46,7 +46,7 @@ class TokenList extends \SimpleTemplate\LinkedList {
         if ($item instanceof \SimpleTemplate\Token) {
             parent::add($item);
             $this->_calculateUndefinedTokens();
-            return;
+            return $this;
         }
         throw new \Exception('Only \SimpleTemplate\Token are supported');
     }
@@ -58,6 +58,7 @@ class TokenList extends \SimpleTemplate\LinkedList {
         if ($chain instanceof \SimpleTemplate\TokenList) {
             parent::makeChain($chain);
             $this->_calculateUndefinedTokens();
+            return $this;
         }
         throw new \Exception('Only \SimpleTemplate\TokenList are supported');
     }

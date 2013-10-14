@@ -40,4 +40,17 @@ class TokenListTest extends \PHPUnit_Framework_TestCase {
         $this->_list->add($mockUndefined);
         $this->assertFalse($this->_list->hasUndefined());
     }
+
+    public function testChainingStyle() {
+        $mockToken = $this->getMock('\SimpleTemplate\Token', array("getType"));
+        $mockToken->expects($this->any())
+            ->method("getType")
+            ->will($this->returnValue("test"));
+        $count = $this->_list
+            ->add($mockToken)
+            ->add($mockToken)
+            ->add($mockToken)
+            ->count();
+        $this->assertEquals(3, $count);
+    }
 }
